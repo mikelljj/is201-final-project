@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bouquet Builder 🌸</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: #fff0f5;
+            font-family: 'Georgia', serif;
+            color: #4a4a4a;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        h1 { font-size: 2.8em; color: #c0547a; margin-bottom: 10px; }
+
+        p.subtitle { font-style: italic; color: #a0607a; margin-bottom: 20px; }
+
+        #occasion-selector {
+            margin-bottom: 30px;
+        }
+
+        #occasion-selector label {
+            font-weight: bold;
+            color: #8b3a52;
+            margin-right: 10px;
+        }
+
+        #occasion-selector select {
+            padding: 8px 15px;
+            border-radius: 10px;
+            border: 2px solid #e8a0b4;
+            font-family: 'Georgia', serif;
+            color: #8b3a52;
+            background-color: #fff0f5;
+            font-size: 1em;
+        }
+
+        #flower-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .flower-btn {
+            background-color: #f8c8d4;
+            border: 2px solid #e8a0b4;
+            border-radius: 16px;
+            padding: 15px 20px;
+            cursor: pointer;
+            font-size: 1em;
+            font-family: 'Georgia', serif;
+            color: #8b3a52;
+            transition: transform 0.1s, background-color 0.2s;
+            width: 160px;
+        }
+
+        .flower-btn:hover { background-color: #f2a7bb; transform: scale(1.05); }
+        .flower-btn .emoji { font-size: 2em; display: block; margin-bottom: 5px; }
+        .flower-btn .name { font-weight: bold; }
+        .flower-btn .meaning { font-size: 0.8em; font-style: italic; color: #a0607a; }
+
+        #bouquet-box {
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+            padding: 30px;
+        }
+
+        #bouquet-box h2 { color: #c0547a; margin-bottom: 15px; }
+
+        #name-input-area {
+            margin-bottom: 20px;
+        }
+
+        #name-input-area input {
+            padding: 8px 15px;
+            border-radius: 10px;
+            border: 2px solid #e8a0b4;
+            font-family: 'Georgia', serif;
+            color: #8b3a52;
+            font-size: 1em;
+            width: 100%;
+            max-width: 300px;
+            text-align: center;
+        }
+
+        #name-input-area input::placeholder { color: #c8a0b0; }
+
+        #bouquet-list {
+            list-style: none;
+            margin-bottom: 20px;
+            min-height: 60px;
+        }
+
+        #bouquet-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f8c8d4;
+            font-size: 1em;
+        }
+
+        #bouquet-message {
+            background-color: #fff0f5;
+            border-radius: 10px;
+            padding: 15px;
+            font-style: italic;
+            color: #8b3a52;
+            margin-bottom: 20px;
+            min-height: 50px;
+        }
+
+        #stem-count { font-size: 0.9em; color: #a0607a; margin-bottom: 15px; }
+
+        .action-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+        .action-btns button {
+            border: none;
+            border-radius: 10px;
+            padding: 10px 25px;
+            color: white;
+            font-size: 1em;
+            font-family: 'Georgia', serif;
+            cursor: pointer;
+        }
+
+        #clear-btn { background-color: #e8a0b4; }
+        #clear-btn:hover { background-color: #c0547a; }
+        #copy-btn { background-color: #f2a7bb; }
+        #copy-btn:hover { background-color: #c0547a; }
+
+        #copy-confirm {
+            font-size: 0.85em;
+            color: #c0547a;
+            font-style: italic;
+            margin-top: 10px;
+            min-height: 20px;
+        }
+
+        #back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #c0547a;
+            text-decoration: none;
+            font-style: italic;
+        }
+
+        #back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <h1>🌸 Bouquet Builder</h1>
+    <p class="subtitle">Pick your flowers and build your perfect bouquet!</p>
+
+    <!-- Occasion Selector -->
+    <div id="occasion-selector">
+        <label for="occasion">Building this bouquet for:</label>
+        <select id="occasion">
+            <option value="general">Just Because 💕</option>
+            <option value="wedding">Wedding 💍</option>
+            <option value="birthday">Birthday 🎂</option>
+            <option value="sympathy">Sympathy 🤍</option>
+            <option value="anniversary">Anniversary 🥂</option>
+        </select>
+    </div>
+
+    <!-- Flower Grid -->
+    <div id="flower-grid">
+        <button class="flower-btn" onclick="addFlower('🌹', 'Rose', 'Love & passion')">
+            <span class="emoji">🌹</span>
+            <span class="name">Rose</span>
+            <span class="meaning">Love & passion</span>
+        </button>
+        <button class="flower-btn" onclick="addFlower('🌷', 'Tulip', 'Perfect love')">
+            <span class="emoji">🌷</span>
+            <span class="name">Tulip</span>
+            <span class="meaning">Perfect love</span>
+        </button>
+        <button class="flower-btn" onclick="addFlower('🌸', 'Cherry Blossom', 'New beginnings')">
+            <span class="emoji">🌸</span>
+            <span class="name">Cherry Blossom</span>
+            <span class="meaning">New beginnings</span>
+        </button>
+        <button class="flower-btn" onclick="addFlower('🌻', 'Sunflower', 'Happiness & warmth')">
+            <span class="emoji">🌻</span>
+            <span class="name">Sunflower</span>
+            <span class="meaning">Happiness & warmth</span>
+        </button>
+        <button class="flower-btn" onclick="addFlower('💐', 'Peony', 'Romance & prosperity')">
+            <span class="emoji">💐</span>
+            <span class="name">Peony</span>
+            <span class="meaning">Romance & prosperity</span>
+        </button>
+        <button class="flower-btn" onclick="addFlower('🌼', 'Daisy', 'Innocence & joy')">
+            <span class="emoji">🌼</span>
+            <span class="name">Daisy</span>
+            <span class="meaning">Innocence & joy</span>
+        </button>
+        <button class="flower-btn" onclick="addFlower('🪻', 'Lavender', 'Calm & grace')">
+            <span class="emoji">🪻</span>
+            <span class="name">Lavender</span>
+            <span class="meaning">Calm & grace</span>
+        </button>
+        <button class="flower-btn" onclick="addFlower('🌺', 'Hibiscus', 'Beauty & charm')">
+            <span class="emoji">🌺</span>
+            <span class="name">Hibiscus</span>
+            <span class="meaning">Beauty & charm</span>
+        </button>
+    </div>
+
+    <!-- Bouquet Box -->
+    <div id="bouquet-box">
+        <h2>💐 Your Bouquet</h2>
+
+        <div id="name-input-area">
+            <input type="text" id="bouquet-name" placeholder="Name your bouquet...">
+        </div>
+
+        <div id="stem-count">0 stems</div>
+
+        <ul id="bouquet-list">
+            <li style="color:#ccc; font-style:italic;">Your bouquet is empty — add some flowers!</li>
+        </ul>
+
+        <div id="bouquet-message"></div>
+
+        <div class="action-btns">
+            <button id="clear-btn" onclick="clearBouquet()">Clear Bouquet 🗑️</button>
+            <button id="copy-btn" onclick="copyBouquet()">Copy Bouquet Message 📋</button>
+        </div>
+        <div id="copy-confirm"></div>
+    </div>
+
+    <a href="scratch.html" id="back-link">← Back to Forever Bloomed Co.</a>
+
+    <script>
+        const bouquet = [];
+
+        const messages = {
+            'Rose': 'Your bouquet carries deep love and passion. ❤️',
+            'Tulip': 'A bouquet of perfect, devoted love. 🌷',
+            'Cherry Blossom': 'New beginnings and beautiful transitions. 🌸',
+            'Sunflower': 'Radiating warmth, joy, and positivity! 🌻',
+            'Peony': 'Romantic, lush, and full of good fortune. 💕',
+            'Daisy': 'Pure, joyful, and full of innocence. 🌼',
+            'Lavender': 'Calm, graceful, and deeply serene. 🪻',
+            'Hibiscus': 'Delicate beauty that captivates the heart. 🌺',
+        };
+
+        const occasionMessages = {
+            'general': 'A heartfelt bouquet, just because. 💕',
+            'wedding': 'Wishing you a lifetime of love and blooms. 💍',
+            'birthday': 'May your day be as bright as these flowers! 🎂',
+            'sympathy': 'Sending love and peace during this tender time. 🤍',
+            'anniversary': 'Celebrating another beautiful year together. 🥂',
+        };
+
+        function addFlower(emoji, name, meaning) {
+            bouquet.push({ emoji, name, meaning });
+            updateBouquet();
+        }
+
+        function updateBouquet() {
+            const list = document.getElementById('bouquet-list');
+            const stemCount = document.getElementById('stem-count');
+            const message = document.getElementById('bouquet-message');
+            const occasion = document.getElementById('occasion').value;
+
+            list.innerHTML = '';
+            bouquet.forEach(flower => {
+                const li = document.createElement('li');
+                li.textContent = `${flower.emoji} ${flower.name} — ${flower.meaning}`;
+                list.appendChild(li);
+            });
+
+            stemCount.textContent = `${bouquet.length} stem${bouquet.length !== 1 ? 's' : ''}`;
+
+            if (bouquet.length === 0) {
+                list.innerHTML = '<li style="color:#ccc; font-style:italic;">Your bouquet is empty — add some flowers!</li>';
+                message.textContent = '';
+            } else {
+                const last = bouquet[bouquet.length - 1];
+                const flowerMsg = messages[last.name] || 'A beautiful and unique bouquet! 🌸';
+                const occasionMsg = occasionMessages[occasion];
+                message.textContent = `${flowerMsg} ${occasionMsg}`;
+            }
+        }
+
+        function clearBouquet() {
+            bouquet.length = 0;
+            document.getElementById('bouquet-name').value = '';
+            document.getElementById('copy-confirm').textContent = '';
+            updateBouquet();
+        }
+
+        function copyBouquet() {
+            if (bouquet.length === 0) {
+                document.getElementById('copy-confirm').textContent = 'Add some flowers first! 🌸';
+                return;
+            }
+
+            const name = document.getElementById('bouquet-name').value || 'My Bouquet';
+            const occasion = document.getElementById('occasion').value;
+            const occasionMsg = occasionMessages[occasion];
+            const flowerList = bouquet.map(f => `${f.emoji} ${f.name}`).join(', ');
+            const last = bouquet[bouquet.length - 1];
+            const flowerMsg = messages[last.name] || '';
+
+            const text = `💐 ${name}\nOccasion: ${document.getElementById('occasion').options[document.getElementById('occasion').selectedIndex].text}\nFlowers: ${flowerList}\n\n${flowerMsg} ${occasionMsg}`;
+
+            navigator.clipboard.writeText(text).then(() => {
+                document.getElementById('copy-confirm').textContent = 'Copied to clipboard! 🌸';
+                setTimeout(() => {
+                    document.getElementById('copy-confirm').textContent = '';
+                }, 3000);
+            });
+        }
+    </script>
+
+</body>
+</html>
